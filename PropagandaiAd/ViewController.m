@@ -13,6 +13,7 @@
 @end
 
 @implementation ViewController
+@synthesize meuBanner;
 
 - (void)viewDidLoad
 {
@@ -22,13 +23,42 @@
 
 - (void)viewDidUnload
 {
+    [self setMeuBanner:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
 
+//emtodo acionado quando o aparelho sofre rotacao com a intencao de nos perguntar se desejamos que a view rotacione junto
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    //verificar para qual orientacao estamos indo
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
+    {
+        meuBanner.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+    }
+    else
+    {
+        meuBanner.currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
+    }
+    
+    return YES;
+}
+
+
+//metodo acionado quando a propaganda é carregada no banner
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+   //aqui fazemos o banner aparecer
+    NSLog(@"Carregou");
+    meuBanner.hidden = NO;
+}
+
+
+//metodo acionado quando falha o carregamento da propaganda
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    NSLog(@"Falhou");
+    meuBanner.hidden = YES;
 }
 
 @end
